@@ -2,7 +2,9 @@ const router = require('express').Router();
 const Users = require('../users/users-model')
 
 const bcrypt = require('bcryptjs')
-const salt = process.env.HASH_ROUNDS || 8
+const salt = require('../config/constants').hash_salt
+
+const { isValid, generateToken } = require('../users/users-service')
 
 router.post('/register', (req, res) => {
   // implement registration
@@ -28,6 +30,25 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   // implement login
+  const { username, password } = req.body
+
+  if (isValid(req.body)) {
+    console.log(req.body)
+    Users.findBy({ username })
+      .then(user => {
+        if (user && bcrypt.compareSync(password, user.password)) {
+          const token = generateToken(user)
+
+          res.status(201).json({ token, message: `${username} is logged in!` })
+        }
+        else {
+          res.status(401).json({ message: 'invalid credentials' })
+        }
+      })
+  }
+  else {
+    res.status(400).json({ message: 'please provide login credentials' })
+  }
 });
 
 module.exports = router;
