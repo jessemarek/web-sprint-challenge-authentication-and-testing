@@ -1,15 +1,15 @@
 const supertest = require('supertest')
 const server = require('./server')
 const db = require('../database/dbConfig')
-const { expectCt } = require('helmet')
 
 describe('server.js', () => {
 
-    /* it('GET /', () => {
+    it('POST /', () => {
         return supertest(server)
-            .get('/')
+            .post('/api/auth/login')
+            .send({ username: 'sentinel', password: 'qwerty' })
             .then(res => {
                 expect(res.status).toBe(200)
             })
-    }) */
+    })
 })
