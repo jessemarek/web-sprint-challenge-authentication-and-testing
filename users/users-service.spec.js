@@ -1,6 +1,6 @@
 const { isValid } = require('./users-service')
 
-describe('testing the user validation function', () => {
+describe('isValid() tests', () => {
 
     it('should reject req.body with no password', () => {
 
